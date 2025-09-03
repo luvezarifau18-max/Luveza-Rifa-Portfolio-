@@ -1,0 +1,114 @@
+// Animation for project cards to appear on scroll
+document.addEventListener('DOMContentLoaded', function() {
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    projectCards.forEach(card => {
+        observer.observe(card);
+    });
+    
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    // Add additional floating flowers dynamically
+    addFloatingFlowers();
+    
+    // Add subtle animation to skills on hover
+    animateSkills();
+});
+
+// Function to add more floating flowers
+function addFloatingFlowers() {
+    const flowers = ['fa-leaf', 'fa-spa', 'fa-seedling', 'fa-feather', 'fa-tree', 'fa-cloud'];
+    const colors = ['var(--pastel-pink)', 'var(--pastel-blue)', 'var(--pastel-green)', 'var(--pastel-yellow)', 'var(--pastel-purple)'];
+    
+    for (let i = 0; i < 8; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        
+        // Random icon
+        const icon = document.createElement('i');
+        icon.className = 'fas ' + flowers[Math.floor(Math.random() * flowers.length)];
+        flower.appendChild(icon);
+        
+        // Random position
+        const left = Math.random() * 100;
+        const top = 10 + Math.random() * 80; // Avoid top 10%
+        
+        // Random color
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Random size
+        const size = 1 + Math.random() * 2;
+        
+        // Random animation delay
+        const delay = Math.random() * 5;
+        
+        // Apply styles
+        flower.style.left = left + '%';
+        flower.style.top = top + '%';
+        flower.style.color = color;
+        flower.style.fontSize = size + 'rem';
+        flower.style.animationDelay = delay + 's';
+        
+        document.body.appendChild(flower);
+    }
+}
+
+// Function to add animation to skills
+function animateSkills() {
+    const skills = document.querySelectorAll('.skill');
+    
+    skills.forEach(skill => {
+        skill.addEventListener('mouseenter', () => {
+            skill.style.transform = 'scale(1.1) translateY(-5px)';
+            skill.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+        });
+        
+        skill.addEventListener('mouseleave', () => {
+            skill.style.transform = 'scale(1) translateY(0)';
+            skill.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+        });
+    });
+}
+
+// Add subtle background animation
+function animateBackground() {
+    const floralBg = document.querySelector('.floral-bg');
+    let scale = 1;
+    let direction = 0.0001;
+    
+    setInterval(() => {
+        scale += direction;
+        
+        if (scale > 1.02 || scale < 1) {
+            direction *= -1;
+        }
+        
+        floralBg.style.transform = `scale(${scale})`;
+    }, 20);
+}
+
+// Initialize background animation
+animateBackground();
